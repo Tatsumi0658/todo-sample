@@ -51,10 +51,15 @@
             {{ item.created }}
           </td>
           <td>
-            <button class="button">{{ item.state }}</button>
+            <button class="button" v-bind:class="{
+              'button--yet': item.state == '作業前',
+              'button--progress': item.state == '作業中',
+              'button--done': item.state == '完了'
+              }"
+              @click="changeState(item)">{{ item.state }}</button>
           </td>
           <td>
-            <button class="button button--delete">削除</button>
+            <button class="button button--red" @click="remove(item)">削除</button>
           </td>
         </tr>
       </tbody>
@@ -80,6 +85,12 @@ export default {
         this.$store.commit('insert', {content: this.content});
         this.content = '';
       }
+    },
+    remove: function(todo){
+      this.$store.commit('remove', todo)
+    },
+    changeState: function(todo){
+      this.$store.commit('changeState', todo)
     }
   }
 }
